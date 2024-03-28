@@ -1,26 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
+const FetchTodos = () => {
+  const [todos, setTodos] = useState([]);
 
-//create your first component
-const Home = () => {
-	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
+  useEffect(() => {
+    const fetchForPosts = async () => {
+      try {
+        const response = await fetch(
+          "https://playground.4geeks.com/apis/fake/todos/user/kjatk"
+        );
+        const todos = await response.json(); // Translating from JSON to JS
+        setTodos(todos);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchForPosts();
+  }, []);
+
+  return (
+    <div>
+      {todos.map((todo) => (
+        <p style={{ color: todo.done ? "green" : "red" }}>{todo.label}</p>
+      ))}
+
+      <button
+        onClick={async () => {
+          const oldTodosPlusNewTodo = [
+            ...todos,
+            { label: "Walk the dog", done: true },
+          ];
+
+          await fetch(
+            "https://playground.4geeks.com/apis/fake/todos/user/kjatk",
+            {
+              method: "PUT",
+              body: JSON.stringify(oldTodosPlusNewTodo), // Translating from JS to JSON
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+        }}
+      >
+        Click to add Task
+      </button>
+    </div>
+  );
 };
 
 export default Home;
