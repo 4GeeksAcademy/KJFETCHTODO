@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-//create your first component
 const Todos = () => {
   
   const [inputValue, setInputValue] = useState("");
@@ -45,6 +44,5 @@ const Todos = () => {
     </div>
   );
 };
-
 
 export default Todos;
